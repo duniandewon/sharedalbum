@@ -1,4 +1,4 @@
-import type {User} from "@/domain/auth/model/User.ts";
+import type {User} from "@/domain/shared/domain/User.ts";
 
 export interface AuthRepository {
     signInWithGoogle(): Promise<User | null>

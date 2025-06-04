@@ -1,7 +1,7 @@
-export interface User {
+export interface UserDto {
     userId: string
     email?: string | null
-    displayName: string | null
+    displayName?: string | null
     photoUrl?: string | null
     emailVerified: boolean
     createdAt: string

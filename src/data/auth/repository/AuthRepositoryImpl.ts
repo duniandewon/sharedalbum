@@ -1,7 +1,7 @@
 import type { User as FirebaseUser } from 'firebase/auth';
 
 import type {AuthRepository} from "@/domain/auth/repository/AuthRepository.ts";
-import type {User} from "@/domain/auth/model/User.ts";
+import type {User} from "@/domain/shared/domain/User.ts";
 
 import type {AuthFirebaseDataSource} from "@/data/auth/datasource/AuthFirebaseDataSource.ts";
 import {AuthFirebaseDataSourceImpl} from "@/data/auth/datasource/AuthFirebaseDataSourceImpl.ts";
@@ -17,8 +17,6 @@ export class AuthRepositoryImpl implements AuthRepository {
         if (!firebaseUser) {
             return null;
         }
-
-        console.log("firebaseUser:", firebaseUser)
 
         const creationTime = firebaseUser.metadata.creationTime || new Date().toISOString();
         const lastSignInTime = firebaseUser.metadata.lastSignInTime || new Date().toISOString();

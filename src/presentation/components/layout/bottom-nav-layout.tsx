@@ -25,7 +25,7 @@ export function BottomNavLayout() {
                     routes.map(({icon, to}) => {
                             const Icon = icon
                             return (
-                                <NavLink to={to} className={({isActive}) => cn(buttonVariants({
+                                <NavLink key={to} to={to} className={({isActive}) => cn(buttonVariants({
                                     variant: isActive ? "default" : "outline",
                                     size: "icon"
                                 }))}>
