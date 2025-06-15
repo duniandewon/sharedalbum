@@ -20,7 +20,7 @@ export function Modal({className, open, onClose, children, ...props}: ModalProps
 
     return <dialog ref={ref} className={cn("group", className)} onCancel={onClose} {...props}>
         <div className="fixed inset-0 grid place-content-center bg-black/70 px-4" onClick={onClose}>
-            <div onClick={e => e.stopPropagation()}>
+            <div className="bg-accent p-3.5 rounded-2xl" onClick={e => e.stopPropagation()}>
                 {children}
             </div>
         </div>
