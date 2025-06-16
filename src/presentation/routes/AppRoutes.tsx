@@ -6,6 +6,7 @@ import {BottomNavLayout} from "@/presentation/components/layout/bottom-nav-layou
 import {Home} from "@/presentation/screens/home";
 import {Events} from "@/presentation/screens/events";
 import {SingIn} from "@/presentation/screens/singin";
+import {EditEvent} from "@/presentation/screens/edit-event";
 
 export function AppRoutes() {
     return (
@@ -16,6 +17,7 @@ export function AppRoutes() {
                     <Route index element={<Home/>}/>
                     <Route path="events" element={<Events/>}/>
                 </Route>
+                <Route path="edit-event" element={<EditEvent/>}/>
             </Route>
         </Routes>
     )
