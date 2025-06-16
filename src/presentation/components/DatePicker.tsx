@@ -21,7 +21,7 @@ export function DatePicker({date, onSelectDate}: Props) {
     }
 
     return <>
-        <Button variant="outline" className="justify-baseline" onClick={() => setOpen(prev => !prev)}>
+        <Button type="button" variant="outline" className="justify-baseline" onClick={() => setOpen(prev => !prev)}>
             <CalendarIcon/>
             {date ? format(date, "PPP") : <span>Pick a date</span>}
         </Button>
