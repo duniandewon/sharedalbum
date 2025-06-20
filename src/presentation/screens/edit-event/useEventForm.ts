@@ -78,10 +78,13 @@ export function useEventForm(
 
     const state = location.state as {
         mode: "create" | "edit";
-        eventName: string
+        eventName: string;
+        from: Location
     }
 
     const mode = useRef<"create" | "edit">(state?.mode ?? "create")
+
+    const from = state?.from?.pathname || '/';
 
     const initialFormState: EventFormState = {
         eventName: state.eventName,
@@ -132,7 +135,7 @@ export function useEventForm(
             });
 
             if (newEventId) {
-                navigate(`/${newEventId}`);
+                navigate(`/events`);
             }
         } catch (e) {
             console.error(e);
@@ -156,6 +159,6 @@ export function useEventForm(
         setField,
         setError,
         onSubmitEvent,
-        onGoBack: () => navigate("/", {replace: true}),
+        onGoBack: () => navigate(from, {replace: true}),
     };
 }

@@ -4,7 +4,7 @@ import {ProtectedRoute} from "@/presentation/components/layout/ProtectedRoute.ts
 import {BottomNavLayout} from "@/presentation/components/layout/bottom-nav-layout.tsx";
 
 import {Home} from "@/presentation/screens/home";
-import {Events} from "@/presentation/screens/events";
+import {EventsHistory} from "@/presentation/screens/events";
 import {SingIn} from "@/presentation/screens/singin";
 import {EditEvent} from "@/presentation/screens/edit-event";
 
@@ -15,7 +15,7 @@ export function AppRoutes() {
             <Route element={<ProtectedRoute/>}>
                 <Route element={<BottomNavLayout/>}>
                     <Route index element={<Home/>}/>
-                    <Route path="events" element={<Events/>}/>
+                    <Route path="events-history" element={<EventsHistory/>}/>
                 </Route>
                 <Route path="edit-event" element={<EditEvent/>}/>
             </Route>

@@ -21,8 +21,9 @@ export class EventsRepositoryImpl implements EventRepository {
         return this.eventDataSource.deleteEvent(eventId)
     }
 
-    getEventsByHostId(hostId: string): Promise<Event[]> {
-        return this.eventDataSource.getEventsByHostId(hostId)
+    async getEventsByHostId(hostId: string): Promise<Event[]> {
+        const events = await this.eventDataSource.getEventsByHostId(hostId)
+        return Object.values(events).map(event => event)
     }
 
     updateEvent(eventId: string, event: Partial<UpdateEvent>): Promise<void> {

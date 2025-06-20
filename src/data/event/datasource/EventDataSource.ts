@@ -3,7 +3,7 @@ import type {EventUpdateDto} from "@/data/event/dto/EventUpdateDto.ts";
 import type {CreateEventDto} from "@/data/event/dto/CreateEventDto.ts";
 
 export interface EventDataSource {
-    getEventsByHostId(hostId: string): Promise<EventDto[]>
+    getEventsByHostId(hostId: string): Promise<Record<string, EventDto>>
 
     createEvent(event: CreateEventDto): Promise<string | null>
 

@@ -9,7 +9,7 @@ const routes = [
         icon: House
     },
     {
-        to: "/events",
+        to: "/events-history",
         icon: CalendarDays
     }
 ]

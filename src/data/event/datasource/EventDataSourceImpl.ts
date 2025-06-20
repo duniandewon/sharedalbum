@@ -29,12 +29,12 @@ export class EventDataSourceImpl implements EventDataSource {
         return remove(ref(this.db, `events/${eventId}`));
     }
 
-    async getEventsByHostId(hostId: string): Promise<EventDto[]> {
+    async getEventsByHostId(hostId: string): Promise<Record<string, EventDto>> {
         const eventsQuery = query(ref(this.db, "events"), orderByChild('hostId'), equalTo(hostId));
         const eventsSnapshot = await get(eventsQuery)
         if (eventsSnapshot.exists()) return eventsSnapshot.val()
 
-        return []
+        return {}
     }
 
     updateEvent(eventId: string, event: Partial<EventUpdateDto>): Promise<void> {
