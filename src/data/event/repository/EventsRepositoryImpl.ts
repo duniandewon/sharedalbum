@@ -13,6 +13,24 @@ export class EventsRepositoryImpl implements EventRepository {
         this.eventDataSource = eventDataSource
     }
 
+    async getEventByShareId(eventShareId: string): Promise<Event | null> {
+        const event = await this.eventDataSource.getEventByShareId(eventShareId)
+
+        if (!event) return null
+
+        const participants: string[] = []
+
+        for (const participant in event.participants) {
+            participants.push(participant)
+        }
+
+        return {...event, participants: participants || []}
+    }
+
+    joinEvent(eventId: string, participantId: string): Promise<void> {
+        return this.eventDataSource.updateEventParticipant(eventId, participantId)
+    }
+
     createEvent(event: CreateEvent): Promise<string | null> {
         return this.eventDataSource.createEvent(event)
     }
@@ -23,7 +41,7 @@ export class EventsRepositoryImpl implements EventRepository {
 
     async getEventsByHostId(hostId: string): Promise<Event[]> {
         const events = await this.eventDataSource.getEventsByHostId(hostId)
-        return Object.values(events).map(event => event)
+        return Object.values(events).map(event => ({...event, participants: []}))
     }
 
     updateEvent(eventId: string, event: Partial<UpdateEvent>): Promise<void> {

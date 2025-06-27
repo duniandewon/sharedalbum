@@ -11,4 +11,5 @@ export interface EventDto {
     photoLimit: number
     createdAt: string
     isActive: boolean
+    participants: Record<string, string>
 }

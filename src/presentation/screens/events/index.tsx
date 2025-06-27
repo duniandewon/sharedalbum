@@ -1,12 +1,10 @@
 import {useEventsHistory} from "@/presentation/screens/events/useEventsHistory.ts";
 import {HostingEventItem} from "@/presentation/screens/events/components/HostingEventItem.tsx";
-import {useLocation, useNavigate} from "react-router";
 
 export function EventsHistory() {
-    const navigate = useNavigate()
-    const location = useLocation()
 
-    const {eventsHosting} = useEventsHistory()
+    const {eventsHosting, navigateToEdit, navigateToEvent} = useEventsHistory()
+
     return (
         <div>
             <h2>Events Hosting</h2>
@@ -15,16 +13,8 @@ export function EventsHistory() {
                     <HostingEventItem
                         key={event.eventId}
                         hostingEvent={event}
-                        onClickCamera={eventShareId => console.log("eventShareId", eventShareId)}
-                        onClickEdit={(eventName) => {
-                            navigate("/edit-event", {
-                                state: {
-                                    from: location,
-                                    eventName,
-                                    mode: "edit"
-                                }
-                            })
-                        }}
+                        onClickCamera={navigateToEvent}
+                        onClickEdit={navigateToEdit}
                         onClickShare={() => console.log("Share this event")}
                     />
                 ))}

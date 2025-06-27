@@ -10,5 +10,6 @@ export interface Event {
     guestLimit: number
     photoLimit: number
     createdAt: string
-    isActive: boolean
+    isActive: boolean,
+    participants: string[]
 }
