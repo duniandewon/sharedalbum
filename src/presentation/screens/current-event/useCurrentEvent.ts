@@ -1,55 +1,56 @@
-import {GetEventByShareIdUseCase} from "@/domain/events/usecase/GetEventByShareIdUseCase.ts";
-import {useParams} from "react-router";
-import {useCallback, useEffect, useState} from "react";
-import {useAuthContext} from "@/presentation/context/authContext.tsx";
-import type {Event} from "@/domain/events/models/Event.ts";
-import {JoinEventUseCase} from "@/domain/events/usecase/JoinEventUseCase.ts";
+import {type Dispatch, useCallback, useEffect, useRef} from "react";
 
-export function useCurrentEvent(getEventByShareIdUseCase = new GetEventByShareIdUseCase(), joinEventUseCase = new JoinEventUseCase()) {
+import {useParams} from "react-router";
+
+import {GetEventByShareIdUseCase} from "@/domain/events/usecase/GetEventByShareIdUseCase.ts";
+import {useAuthContext} from "@/presentation/context/authContext.tsx";
+import {JoinEventUseCase} from "@/domain/events/usecase/JoinEventUseCase.ts";
+import type {EventCameraAction, EventCameraState} from "@/presentation/screens/current-event/useEventCameraReducer.ts";
+
+export function useCurrentEvent(state: EventCameraState, dispatch: Dispatch<EventCameraAction>, getEventByShareIdUseCase = new GetEventByShareIdUseCase(), joinEventUseCase = new JoinEventUseCase()) {
     const params = useParams()
 
     const {currentUser} = useAuthContext()
-    const [currentEvent, setCurrentEvent] = useState<Event | null>(null)
 
-    const [hasJoinedBefore, setHasJoinedBefore] = useState(false)
-
-    const [isLoading, setIsLoading] = useState(true)
+    const didRunRef = useRef(false)
 
     const getCurrentEvent = useCallback(async () => {
+        if (!params.eventShareId) return;
+
         try {
-            if (!params.eventShareId) return;
             const currentEvent = await getEventByShareIdUseCase.execute(params.eventShareId)
 
-            setCurrentEvent(currentEvent)
-
-            const joined = currentEvent?.participants.includes(currentUser?.userId || "")
-            setHasJoinedBefore(!!joined)
+            if (currentEvent) {
+                dispatch({type: "SET_EVENT", payload: currentEvent})
+                const joined = currentEvent?.participants.includes(currentUser?.userId || "")
+                dispatch({type: "SET_HAS_JOINED_BEFORE", payload: joined})
+                dispatch({type: "SET_REMAINING_SHOTS", payload: currentEvent.photoLimit})
+            }
         } catch (e) {
             console.log("error:", e)
         } finally {
-            setIsLoading(false)
+            dispatch({type: "SET_EVENT_LOADING", payload: false})
         }
-    }, [currentUser?.userId, getEventByShareIdUseCase, params.eventShareId])
+    }, [currentUser?.userId, dispatch, getEventByShareIdUseCase, params.eventShareId])
 
     const joinEvent = useCallback(async () => {
+        const {currentEvent} = state
         if (!currentUser && !currentEvent) return;
-        setHasJoinedBefore(true)
 
         try {
             await joinEventUseCase.execute(currentEvent?.eventId || "", currentUser?.userId || "")
-
-            setCurrentEvent(prev => prev ? {
-                ...prev,
-                participants: [...prev.participants, currentUser?.userId || ""]
-            } : prev)
+            dispatch({type: "SET_HAS_JOINED_BEFORE", payload: true})
         } catch (err) {
             console.error("Failed to join event", err)
         }
-    }, [currentEvent, currentUser, joinEventUseCase])
+    }, [currentUser, dispatch, joinEventUseCase, state])
 
     useEffect(() => {
-        if (currentUser) getCurrentEvent()
+        if (currentUser && !didRunRef.current) {
+            getCurrentEvent()
+            didRunRef.current = true
+        }
+    }, [currentUser, dispatch, getCurrentEvent])
 
-    }, [currentUser, getCurrentEvent]);
-    return {isLoggedIn: !!currentUser, currentEvent, hasJoinedBefore, joinEvent, isLoading}
+    return {isLoggedIn: !!currentUser, joinEvent}
 }
