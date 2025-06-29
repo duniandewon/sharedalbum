@@ -24,7 +24,6 @@ export function useCurrentEvent(state: EventCameraState, dispatch: Dispatch<Even
                 dispatch({type: "SET_EVENT", payload: currentEvent})
                 const joined = currentEvent?.participants.includes(currentUser?.userId || "")
                 dispatch({type: "SET_HAS_JOINED_BEFORE", payload: joined})
-                dispatch({type: "SET_REMAINING_SHOTS", payload: currentEvent.photoLimit})
             }
         } catch (e) {
             console.log("error:", e)

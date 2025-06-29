@@ -1,13 +1,32 @@
-import {type Dispatch, useCallback} from "react";
+import {type Dispatch, useCallback, useEffect, useRef} from "react";
 
 import {UploadPictureUseCase} from "@/domain/picture/usecase/UploadPictureUseCase.ts";
 import type {EventCameraAction, EventCameraState} from "@/presentation/screens/current-event/useEventCameraReducer.ts";
 import {useAuthContext} from "@/presentation/context/authContext.tsx";
+import {GetPicturesByUploaderIdUseCase} from "@/domain/picture/usecase/GetPicturesByUploaderIdUseCase.ts";
 
-export function usePictureCapture(state: EventCameraState, dispatch: Dispatch<EventCameraAction>, uploadPictureUseCase = new UploadPictureUseCase()) {
+export function usePictureCapture(state: EventCameraState, dispatch: Dispatch<EventCameraAction>, uploadPictureUseCase = new UploadPictureUseCase(), getPicturesByUploaderIdUseCase = new GetPicturesByUploaderIdUseCase()) {
     const {currentUser} = useAuthContext()
 
     const {currentEvent} = state
+
+    const isFirstLoad = useRef(true)
+
+    useEffect(() => {
+        if (currentEvent && currentUser && isFirstLoad.current) {
+            const fetchPicturesTaken = async () => {
+                const pictures = await getPicturesByUploaderIdUseCase.execute(currentEvent.eventId, currentUser?.userId)
+
+                const remaining = Math.max(0, currentEvent.photoLimit - pictures.length)
+
+                dispatch({type: "SET_REMAINING_SHOTS", payload: remaining})
+            }
+
+            fetchPicturesTaken()
+
+            isFirstLoad.current = false
+        }
+    }, [currentEvent, currentUser, dispatch, getPicturesByUploaderIdUseCase]);
 
     const uploadPicture = useCallback(async (picture: string) => {
         if (!currentUser || !currentEvent) return
