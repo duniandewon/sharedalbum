@@ -1,6 +1,7 @@
-import type {PictureRepository} from "@/domain/picture/repository/PictureRepository.ts";
 import type {PictureDataSource} from "@/data/picture/datasource/PictureDataSource.ts";
 import {PictureDataSourceImpl} from "@/data/picture/datasource/PictureDataSourceImpl.ts";
+
+import type {PictureRepository} from "@/domain/picture/repository/PictureRepository.ts";
 import type {Picture} from "@/domain/picture/models/Picture.ts";
 
 export class PicturesRepositoryImpl implements PictureRepository {
@@ -24,5 +25,9 @@ export class PicturesRepositoryImpl implements PictureRepository {
         return this.picturesDataSource.uploadPicture(uploaderId, uploaderName, eventId, picture)
     }
 
+    async gitPicturesByUploaderId(eventId: string, uploaderId: string): Promise<Picture[]> {
+        const pictures = await this.picturesDataSource.getPicturesByUploaderId(eventId, uploaderId)
 
+        return Object.values(pictures)
+    }
 }

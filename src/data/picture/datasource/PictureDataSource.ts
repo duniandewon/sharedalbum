@@ -5,5 +5,7 @@ export interface PictureDataSource {
 
     getPictureByEventId(eventId: string): Promise<Record<string, PictureDto>>
 
+    getPicturesByUploaderId(eventId: string, uploaderId: string): Promise<Record<string, PictureDto>>
+
     deletePicture(pictureId: string, eventId: string): Promise<void>
 }

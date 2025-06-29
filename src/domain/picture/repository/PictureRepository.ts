@@ -5,5 +5,7 @@ export interface PictureRepository {
 
     getPictureByEventId(eventId: string): Promise<Picture[]>
 
+    gitPicturesByUploaderId(eventId: string, uploaderId: string): Promise<Picture[]>
+
     deletePicture(imageId: string, eventId: string): Promise<void>
 }

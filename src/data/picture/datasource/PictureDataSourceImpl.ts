@@ -1,5 +1,5 @@
 import {type FirebaseStorage, ref as storageRef, uploadString, getDownloadURL, deleteObject} from 'firebase/storage';
-import {Database, get, push, ref as dbRef, remove, set} from "firebase/database";
+import {Database, equalTo, get, orderByChild, push, query, ref as dbRef, remove, set} from "firebase/database";
 
 import {firebaseDatabase, firebaseStorage} from "@/core/config/firebase.ts";
 
@@ -63,5 +63,16 @@ export class PictureDataSourceImpl implements PictureDataSource {
         await set(newPictureRef, initialMeta)
 
         return url
+    }
+
+    async getPicturesByUploaderId(eventId: string, uploaderId: string): Promise<Record<string, PictureDto>> {
+        const picturesRef = dbRef(this.db, `pictures/${eventId}`);
+        const uploaderQuery = query(picturesRef, orderByChild("uploaderId"), equalTo(uploaderId));
+
+        const picturesSnapshot = await get(uploaderQuery)
+
+        if (picturesSnapshot.exists()) return picturesSnapshot.val()
+
+        return {}
     }
 }
