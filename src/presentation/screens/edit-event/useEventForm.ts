@@ -135,7 +135,7 @@ export function useEventForm(
             });
 
             if (newEventId) {
-                navigate(`/events`);
+                navigate(`/events-history`);
             }
         } catch (e) {
             console.error(e);
