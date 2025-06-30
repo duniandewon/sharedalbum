@@ -3,6 +3,7 @@ import {useEffect, useRef, useState} from "react"
 import {buttonVariants} from "@/presentation/components/ui/button.tsx";
 
 import {cn} from "@/core/utils/cn.ts";
+import {AppHeader} from "@/presentation/components/AppHeader.tsx";
 
 interface Props {
     remainingShot: number
@@ -10,9 +11,10 @@ interface Props {
     stream: MediaStream | null
     onTakePicture: (dataUrl: string) => void,
     onNavigateToAlbum: () => void
+    onNavigateBack: () => void
 }
 
-export function EventCamera({stream, onTakePicture, canTakePicture, remainingShot, onNavigateToAlbum}: Props) {
+export function EventCamera({stream, onTakePicture, canTakePicture, remainingShot, onNavigateToAlbum, onNavigateBack}: Props) {
     const streamRef = useRef<HTMLVideoElement | null>(null)
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
@@ -44,7 +46,10 @@ export function EventCamera({stream, onTakePicture, canTakePicture, remainingSho
     }, [stream])
 
     return (
-        <div className="h-screen w-screen grid grid-rows-[1fr_auto] bg-accent">
+        <div className="h-screen w-screen grid grid-rows-[1fr_auto] bg-accent relative">
+            <div className="absolute top-0 left-0 z-50">
+                <AppHeader onClickBack={onNavigateBack}/>
+            </div>
             <div className="relative rounded-b-4xl overflow-hidden">
                 {isFlashing && (
                     <div

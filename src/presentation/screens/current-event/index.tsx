@@ -29,6 +29,11 @@ export function CurrentEvent() {
         })
     }
 
+    const onNavigateBack = () => {
+        stopStream()
+        navigate(-1)
+    }
+
     useEffect(() => {
         if (state.mediaPermissionStatus === "granted" && state.hasJoinedBefore) startStream()
     }, [startStream, state.hasJoinedBefore, state.mediaPermissionStatus])
@@ -55,6 +60,7 @@ export function CurrentEvent() {
                     stream={state.mediaStream}
                     onTakePicture={uploadPicture}
                     onNavigateToAlbum={onNavigateToAlbum}
+                    onNavigateBack={onNavigateBack}
                 />
             ) : (
                 <div className="h-screen grid items-end p-4">
