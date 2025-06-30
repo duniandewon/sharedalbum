@@ -17,7 +17,7 @@ const routes = [
 export function BottomNavLayout() {
     return (
         <div className="h-screen w-screen grid grid-rows-[1fr_auto] overflow-hidden">
-            <main className="flex px-8 py-4">
+            <main className="flex px-8 py-4 overflow-hidden">
                 <Outlet/>
             </main>
             <nav className="flex justify-between px-8 py-4 bg-secondary">
