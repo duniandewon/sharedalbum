@@ -1,16 +1,18 @@
 import {useEffect, useRef, useState} from "react"
+
 import {buttonVariants} from "@/presentation/components/ui/button.tsx";
-import {Link} from "react-router";
+
 import {cn} from "@/core/utils/cn.ts";
 
 interface Props {
     remainingShot: number
     canTakePicture: boolean
     stream: MediaStream | null
-    onTakePicture: (dataUrl: string) => void
+    onTakePicture: (dataUrl: string) => void,
+    onNavigateToAlbum: () => void
 }
 
-export function EventCamera({stream, onTakePicture, canTakePicture, remainingShot}: Props) {
+export function EventCamera({stream, onTakePicture, canTakePicture, remainingShot, onNavigateToAlbum}: Props) {
     const streamRef = useRef<HTMLVideoElement | null>(null)
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
@@ -65,9 +67,12 @@ export function EventCamera({stream, onTakePicture, canTakePicture, remainingSho
                     onClick={handleTakePicture}
                     disabled={!canTakePicture}
                 />
-                <Link className={cn("justify-self-end", buttonVariants({variant: "default"}))} to="album">To
-                    Album
-                </Link>
+                <button
+                    className={cn("justify-self-end", buttonVariants({variant: "default"}))}
+                    onClick={onNavigateToAlbum}
+                >
+                    To Album
+                </button>
             </div>
             <canvas ref={canvasRef} className="hidden"/>
         </div>

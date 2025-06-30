@@ -1,5 +1,7 @@
 import {useEffect} from "react";
 
+import {useNavigate} from "react-router";
+
 import {useCurrentEvent} from "@/presentation/screens/current-event/useCurrentEvent.ts";
 import {EventLobby} from "@/presentation/screens/current-event/components/EventLobby.tsx";
 import {EventCamera} from "@/presentation/screens/current-event/components/EventCamera.tsx";
@@ -12,8 +14,20 @@ export function CurrentEvent() {
     const {state, dispatch} = useEventCameraReducer()
 
     const {joinEvent, isLoggedIn} = useCurrentEvent(state, dispatch)
-    const {requestPermissions, startStream} = useMediaPermission(state, dispatch)
+    const {requestPermissions, startStream, stopStream} = useMediaPermission(state, dispatch)
     const {uploadPicture, canTakePicture} = usePictureCapture(state, dispatch)
+
+    const navigate = useNavigate()
+
+    const onNavigateToAlbum = () => {
+        stopStream()
+        navigate("album", {
+            state: {
+                eventName: state.currentEvent?.eventName || "",
+                participantsNumber: state.currentEvent?.participants?.length || 0
+            }
+        })
+    }
 
     useEffect(() => {
         if (state.mediaPermissionStatus === "granted" && state.hasJoinedBefore) startStream()
@@ -40,6 +54,7 @@ export function CurrentEvent() {
                     canTakePicture={canTakePicture}
                     stream={state.mediaStream}
                     onTakePicture={uploadPicture}
+                    onNavigateToAlbum={onNavigateToAlbum}
                 />
             ) : (
                 <div className="h-screen grid items-end p-4">

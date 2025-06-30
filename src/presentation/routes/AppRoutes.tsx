@@ -8,12 +8,14 @@ import {EventsHistory} from "@/presentation/screens/events";
 import {SingIn} from "@/presentation/screens/singin";
 import {EditEvent} from "@/presentation/screens/edit-event";
 import {CurrentEvent} from "@/presentation/screens/current-event";
+import {EventAlbum} from "@/presentation/screens/event-album";
 
 export function AppRoutes() {
     return (
         <Routes>
             <Route path="/signin" element={<SingIn/>}/>
             <Route element={<CurrentEvent/>} path="event/:eventShareId"/>
+            <Route element={<EventAlbum/>} path="event/:eventShareId/album"/>
             <Route element={<ProtectedRoute/>}>
                 <Route element={<BottomNavLayout/>}>
                     <Route index element={<Home/>}/>
