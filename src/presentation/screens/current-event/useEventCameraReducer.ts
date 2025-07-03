@@ -4,6 +4,7 @@ import {useReducer} from "react";
 
 type MediaPermissionStatus = "idle" | "pending" | "granted" | "denied" | "error"
 type UploadStatus = "idle" | "uploading" | "error" | "success"
+type CameraFacingMode = "user" | "environment"
 
 export interface EventCameraState {
     currentEvent: Event | null
@@ -13,6 +14,7 @@ export interface EventCameraState {
     mediaStream: MediaStream | null
     remainingShots: number
     uploadStatus: UploadStatus
+    cameraFacingMode: CameraFacingMode
 }
 
 
@@ -29,6 +31,7 @@ export type EventCameraAction =
     | { type: "SET_EVENT_LOADING"; payload: boolean }
     | { type: "JOIN_EVENT", payload: string }
     | { type: "SET_REMAINING_SHOTS", payload: number }
+    | { type: "SET_CAMERA_FACING_MODE", payload: CameraFacingMode }
 
 function eventCameraReducer(state: EventCameraState, action: EventCameraAction): EventCameraState {
     switch (action.type) {
@@ -82,6 +85,11 @@ function eventCameraReducer(state: EventCameraState, action: EventCameraAction):
                 ...state,
                 mediaStream: null,
             }
+        case "SET_CAMERA_FACING_MODE":
+            return {
+                ...state,
+                cameraFacingMode: action.payload
+            }
         default:
             return state
     }
@@ -95,7 +103,8 @@ export function useEventCameraReducer() {
         remainingShots: 0,
         uploadStatus: "idle",
         mediaStream: null,
-        mediaPermissionStatus: "idle"
+        mediaPermissionStatus: "idle",
+        cameraFacingMode: "user"
     }
     const [state, dispatch] = useReducer(eventCameraReducer, initialState)
 

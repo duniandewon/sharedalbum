@@ -1,5 +1,3 @@
-import {useEffect} from "react";
-
 import {useNavigate} from "react-router";
 
 import {useCurrentEvent} from "@/presentation/screens/current-event/useCurrentEvent.ts";
@@ -14,7 +12,7 @@ export function CurrentEvent() {
     const {state, dispatch} = useEventCameraReducer()
 
     const {joinEvent, isLoggedIn} = useCurrentEvent(state, dispatch)
-    const {requestPermissions, startStream, stopStream} = useMediaPermission(state, dispatch)
+    const {requestPermissions, stopStream, toggleCameraFacingMode} = useMediaPermission(state, dispatch)
     const {uploadPicture, canTakePicture} = usePictureCapture(state, dispatch)
 
     const navigate = useNavigate()
@@ -33,10 +31,6 @@ export function CurrentEvent() {
         stopStream()
         navigate(-1)
     }
-
-    useEffect(() => {
-        if (state.mediaPermissionStatus === "granted" && state.hasJoinedBefore) startStream()
-    }, [startStream, state.hasJoinedBefore, state.mediaPermissionStatus])
 
     if (state.isEventLoading) return (
         <div className="h-screen w-screen grid place-items-center">
@@ -61,6 +55,7 @@ export function CurrentEvent() {
                     onTakePicture={uploadPicture}
                     onNavigateToAlbum={onNavigateToAlbum}
                     onNavigateBack={onNavigateBack}
+                    onSwitchCameraFacingMode={toggleCameraFacingMode}
                 />
             ) : (
                 <div className="h-screen grid items-end p-4">
