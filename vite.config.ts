@@ -5,18 +5,21 @@ import tailwindcss from '@tailwindcss/vite'
 import * as fs from "node:fs";
 
 // https://vite.dev/config/
-export default defineConfig({
-    plugins: [react(), tailwindcss()],
-    server: {
-        https: {
-            key: fs.readFileSync('./certs/localhost-key.pem'),
-            cert: fs.readFileSync('./certs/localhost.pem'),
+export default defineConfig(({command}) => {
+    const isDev = command === "serve"
+    return {
+        plugins: [react(), tailwindcss()],
+        server: isDev ? {
+            https: {
+                key: fs.readFileSync('./certs/localhost-key.pem'),
+                cert: fs.readFileSync('./certs/localhost.pem'),
+            },
+            host: true,
+        } : undefined,
+        resolve: {
+            alias: {
+                "@": path.resolve(__dirname, "./src"),
+            },
         },
-        host: true,
-    },
-    resolve: {
-        alias: {
-            "@": path.resolve(__dirname, "./src"),
-        },
-    },
+    }
 })
