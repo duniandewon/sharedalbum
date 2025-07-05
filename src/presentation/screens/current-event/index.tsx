@@ -11,7 +11,7 @@ import {useEventCameraReducer} from "@/presentation/screens/current-event/useEve
 export function CurrentEvent() {
     const {state, dispatch} = useEventCameraReducer()
 
-    const {joinEvent, isLoggedIn} = useCurrentEvent(state, dispatch)
+    const {joinEvent, isLoggedIn, userHasJoinedBefore} = useCurrentEvent(state, dispatch)
     const {requestPermissions, stopStream, toggleCameraFacingMode} = useMediaPermission(state, dispatch)
     const {uploadPicture, canTakePicture} = usePictureCapture(state, dispatch)
 
@@ -47,7 +47,7 @@ export function CurrentEvent() {
                         onGetPermission={requestPermissions}
                     /> : null
             }
-            {state.hasJoinedBefore ? (
+            {userHasJoinedBefore ? (
                 <EventCamera
                     remainingShot={state.remainingShots}
                     canTakePicture={canTakePicture}
@@ -62,7 +62,7 @@ export function CurrentEvent() {
                     <EventLobby
                         eventName={state.currentEvent?.eventName || ""}
                         isLoggedIn={isLoggedIn}
-                        onJoin={() => joinEvent()}
+                        onJoin={displayName => joinEvent(displayName)}
                     />
                 </div>
             )}

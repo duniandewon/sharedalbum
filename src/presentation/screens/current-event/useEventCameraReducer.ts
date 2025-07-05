@@ -6,15 +6,20 @@ type MediaPermissionStatus = "idle" | "pending" | "granted" | "denied" | "error"
 type UploadStatus = "idle" | "uploading" | "error" | "success"
 type CameraFacingMode = "user" | "environment"
 
+export interface Participant {
+    id: string;
+    displayName: string;
+}
+
 export interface EventCameraState {
     currentEvent: Event | null
     isEventLoading: boolean
-    hasJoinedBefore: boolean
     mediaPermissionStatus: MediaPermissionStatus
     mediaStream: MediaStream | null
     remainingShots: number
     uploadStatus: UploadStatus
     cameraFacingMode: CameraFacingMode
+    currentParticipant: Participant | null
 }
 
 
@@ -32,6 +37,8 @@ export type EventCameraAction =
     | { type: "JOIN_EVENT", payload: string }
     | { type: "SET_REMAINING_SHOTS", payload: number }
     | { type: "SET_CAMERA_FACING_MODE", payload: CameraFacingMode }
+    | { type: "SET_CURRENT_PARTICIPANT"; payload: Participant | null }
+    | { type: "UPDATE_PARTICIPANT", payload: string }
 
 function eventCameraReducer(state: EventCameraState, action: EventCameraAction): EventCameraState {
     switch (action.type) {
@@ -54,11 +61,6 @@ function eventCameraReducer(state: EventCameraState, action: EventCameraAction):
             return {
                 ...state,
                 isEventLoading: action.payload
-            }
-        case "SET_HAS_JOINED_BEFORE":
-            return {
-                ...state,
-                hasJoinedBefore: action.payload
             }
         case "SET_MEDIA_PERMISSION":
             return {
@@ -90,6 +92,22 @@ function eventCameraReducer(state: EventCameraState, action: EventCameraAction):
                 ...state,
                 cameraFacingMode: action.payload
             }
+        case "SET_CURRENT_PARTICIPANT":
+            return {
+                ...state,
+                currentParticipant: action.payload,
+            }
+        case "UPDATE_PARTICIPANT": {
+            if (!state.currentEvent) return state
+
+            return {
+                ...state,
+                currentEvent: {
+                    ...state.currentEvent,
+                    participants: [...state.currentEvent?.participants || "", action.payload]
+                }
+            }
+        }
         default:
             return state
     }
@@ -99,13 +117,14 @@ export function useEventCameraReducer() {
     const initialState: EventCameraState = {
         currentEvent: null,
         isEventLoading: true,
-        hasJoinedBefore: false,
         remainingShots: 0,
         uploadStatus: "idle",
         mediaStream: null,
         mediaPermissionStatus: "idle",
-        cameraFacingMode: "user"
+        cameraFacingMode: "user",
+        currentParticipant: null
     }
+
     const [state, dispatch] = useReducer(eventCameraReducer, initialState)
 
     return {state, dispatch}

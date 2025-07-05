@@ -2,20 +2,17 @@ import {type Dispatch, useCallback, useEffect, useRef} from "react";
 
 import {UploadPictureUseCase} from "@/domain/picture/usecase/UploadPictureUseCase.ts";
 import type {EventCameraAction, EventCameraState} from "@/presentation/screens/current-event/useEventCameraReducer.ts";
-import {useAuthContext} from "@/presentation/context/authContext.tsx";
 import {GetPicturesByUploaderIdUseCase} from "@/domain/picture/usecase/GetPicturesByUploaderIdUseCase.ts";
 
 export function usePictureCapture(state: EventCameraState, dispatch: Dispatch<EventCameraAction>, uploadPictureUseCase = new UploadPictureUseCase(), getPicturesByUploaderIdUseCase = new GetPicturesByUploaderIdUseCase()) {
-    const {currentUser} = useAuthContext()
-
-    const {currentEvent} = state
+    const {currentEvent, currentParticipant} = state
 
     const isFirstLoad = useRef(true)
 
     useEffect(() => {
-        if (currentEvent && currentUser && isFirstLoad.current) {
+        if (currentEvent && currentParticipant && isFirstLoad.current) {
             const fetchPicturesTaken = async () => {
-                const pictures = await getPicturesByUploaderIdUseCase.execute(currentEvent.eventId, currentUser?.userId)
+                const pictures = await getPicturesByUploaderIdUseCase.execute(currentEvent.eventId, currentParticipant?.id || "")
 
                 const remaining = Math.max(0, currentEvent.photoLimit - pictures.length)
 
@@ -26,17 +23,17 @@ export function usePictureCapture(state: EventCameraState, dispatch: Dispatch<Ev
 
             isFirstLoad.current = false
         }
-    }, [currentEvent, currentUser, dispatch, getPicturesByUploaderIdUseCase]);
+    }, [currentEvent, currentParticipant, dispatch, getPicturesByUploaderIdUseCase]);
 
     const uploadPicture = useCallback(async (picture: string) => {
-        if (!currentUser || !currentEvent) return
+        if (!currentParticipant || !currentEvent) return
         dispatch({type: "DECREMENT_SHOT"})
         try {
             dispatch({type: "SET_UPLOAD_STATUS", payload: "uploading"})
 
             await uploadPictureUseCase.execute(
-                currentUser.userId,
-                currentUser.displayName || "",
+                currentParticipant.id,
+                currentParticipant.displayName,
                 currentEvent.eventId,
                 picture
             )
@@ -47,7 +44,7 @@ export function usePictureCapture(state: EventCameraState, dispatch: Dispatch<Ev
             dispatch({type: "INCREMENT_SHOT"})
             dispatch({type: "SET_UPLOAD_STATUS", payload: "error"})
         }
-    }, [currentEvent, currentUser, dispatch, uploadPictureUseCase])
+    }, [currentEvent, currentParticipant, dispatch, uploadPictureUseCase])
 
     return {
         uploadPicture,

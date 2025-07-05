@@ -11,7 +11,7 @@ export interface EventRepository {
 
     getEventByShareId(eventShareId: string): Promise<Event | null>
 
-    joinEvent(eventId: string, participantId: string): Promise<void>
+    joinEvent(eventId: string, participantId: string, participantName: string): Promise<void>
 
     deleteEvent(eventId: string): Promise<void>
 }

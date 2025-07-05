@@ -13,8 +13,8 @@ export class EventDataSourceImpl implements EventDataSource {
         this.db = firebaseDb
     }
 
-    updateEventParticipant(eventId: string, participantId: string): Promise<void> {
-        return set(ref(this.db, `events/${eventId}/participants/${participantId}`), participantId);
+    updateEventParticipant(eventId: string, participantId: string, displayName: string): Promise<void> {
+        return set(ref(this.db, `events/${eventId}/participants/${participantId}`), displayName)
     }
 
     async getEventByShareId(eventId: string): Promise<EventDto | null> {

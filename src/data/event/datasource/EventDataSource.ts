@@ -11,7 +11,7 @@ export interface EventDataSource {
 
     updateEvent(eventId: string, event: Partial<EventUpdateDto>): Promise<void>
 
-    updateEventParticipant(eventId: string, participantId: string): Promise<void>
+    updateEventParticipant(eventId: string, participantId: string, displayName: string): Promise<void>
 
     deleteEvent(eventId: string): Promise<void>
 }

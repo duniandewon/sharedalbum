@@ -7,7 +7,11 @@ export function useMediaPermission(state: EventCameraState, dispatch: Dispatch<E
     const mediaStreamConstraints = useMemo<MediaStreamConstraints>(() => (
         {
             video: {
-                facingMode: state.cameraFacingMode
+                facingMode: state.cameraFacingMode,
+                width: {min: 640, ideal: 1920, max: 1920},
+                height: {min: 400, ideal: 1080},
+                aspectRatio: 1.777777778,
+                frameRate: {max: 30},
             }
         }
     ), [state.cameraFacingMode])

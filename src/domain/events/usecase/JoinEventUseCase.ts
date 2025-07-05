@@ -8,7 +8,11 @@ export class JoinEventUseCase {
         this.eventRepository = eventRepository
     }
 
-    async execute(eventId: string, participantId: string) {
-        return await this.eventRepository.joinEvent(eventId, participantId)
+    async execute(eventId: string, participantId: string, participantName: string) {
+        if (!eventId || !participantName) {
+            throw new Error("Event ID and display name are required");
+        }
+
+        await this.eventRepository.joinEvent(eventId, participantId, participantName)
     }
 }

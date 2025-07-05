@@ -27,8 +27,8 @@ export class EventsRepositoryImpl implements EventRepository {
         return {...event, participants: participants || []}
     }
 
-    joinEvent(eventId: string, participantId: string): Promise<void> {
-        return this.eventDataSource.updateEventParticipant(eventId, participantId)
+    joinEvent(eventId: string, participantId: string, participantName: string): Promise<void> {
+        return this.eventDataSource.updateEventParticipant(eventId, participantId, participantName)
     }
 
     createEvent(event: CreateEvent): Promise<string | null> {
