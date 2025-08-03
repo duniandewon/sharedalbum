@@ -1,6 +1,6 @@
 export interface UserDto {
     userId: string
-    email?: string | null
+    email: string
     displayName?: string | null
     photoUrl?: string | null
     emailVerified: boolean

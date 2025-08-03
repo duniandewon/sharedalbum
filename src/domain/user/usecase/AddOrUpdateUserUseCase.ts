@@ -10,7 +10,7 @@ export class AddOrUpdateUserUseCase {
     }
 
     async execute(user: User) {
-        const existingUser = await this.userRepository.getUserById(user.userId)
+        const existingUser = await this.userRepository.getUserByEmail(user.email)
 
         const now = new Date().toISOString()
         if (existingUser) {

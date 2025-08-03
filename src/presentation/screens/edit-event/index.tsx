@@ -10,7 +10,7 @@ import {EventNameModal} from "@/presentation/screens/edit-event/components/Event
 import {NumberOfPhotosModal} from "@/presentation/screens/edit-event/components/NumberOfPhotosModal.tsx";
 import {NumberOfGuestsModal} from "@/presentation/screens/edit-event/components/NumberOfGuestsModal.tsx";
 import {useEventForm} from "@/presentation/screens/edit-event/useEventForm.ts";
-
+import {CoverPhoto} from "@/presentation/screens/edit-event/components/CoverPhoto.tsx";
 
 export function EditEvent() {
     const {
@@ -18,6 +18,7 @@ export function EditEvent() {
         eventEndDate,
         numberOfGuests,
         numberOfPhotos,
+        eventCoverPhoto,
         modals,
         isSubmitting,
         onSubmitEvent,
@@ -47,12 +48,7 @@ export function EditEvent() {
                     title={<Title/>}
                 />
                 <main className="grid grid-rows-2 p-4">
-                    <div className="flex justify-center items-center">
-                        <Button>
-                            <Camera/>
-                            Select a cover photo
-                        </Button>
-                    </div>
+                    <CoverPhoto onSelectCoverPhoto={file => setField("eventCoverPhoto", file)}/>
 
                     <div className="space-y-4 grid content-end">
                         <div className="grid grid-cols-[auto_1fr] items-center gap-x-2"
@@ -77,7 +73,7 @@ export function EditEvent() {
                             <p className="text-xs text-secondary-foreground/40">Number of photos per guest</p>
                             <p>{numberOfPhotos} Photos</p>
                         </div>
-                        <Button className="w-full" onClick={onClickContinue} disabled={isSubmitting}>
+                        <Button className="w-full" onClick={onClickContinue} disabled={isSubmitting || !eventCoverPhoto}>
                             CONTINUE
                         </Button>
                     </div>

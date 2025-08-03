@@ -4,11 +4,12 @@ import {useState} from "react";
 
 interface Props {
     eventName: string
+    eventCoverPhoto: string
     isLoggedIn: boolean
-    onJoin: (displayName:string) => void
+    onJoin: (displayName: string) => void
 }
 
-export function EventLobby({onJoin, eventName, isLoggedIn}: Props) {
+export function EventLobby({onJoin, eventName, isLoggedIn, eventCoverPhoto}: Props) {
     const [displayName, setDisplayName] = useState("")
 
     const renderJoinButton = () => <Button className="w-full" onClick={() => onJoin("")}>Join Event</Button>
@@ -27,9 +28,21 @@ export function EventLobby({onJoin, eventName, isLoggedIn}: Props) {
     )
 
     return (
-        <div className="space-y-4">
-            <h2 className="text-center font-bold">{eventName}</h2>
-            {isLoggedIn ? renderJoinButton() : renderJoinEventForm()}
+        <div
+            className="space-y-4 h-dvh relative grid items-end p-4"
+            style={{
+                backgroundImage: `url(${eventCoverPhoto})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center center",
+            }}>
+            <div
+                className="absolute top-0 w-full h-full bg-black opacity-50 pointer-events-none"
+                aria-hidden="true"
+            />
+            <div className="relative z-10 space-y-2">
+                <h2 className="text-center font-bold text-2xl">{eventName}</h2>
+                {isLoggedIn ? renderJoinButton() : renderJoinEventForm()}
+            </div>
         </div>
     )
 }

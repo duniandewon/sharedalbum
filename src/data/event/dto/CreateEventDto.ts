@@ -1,6 +1,6 @@
 export interface CreateEventDto {
     eventName: string
-    eventCoverPicture: string
+    eventCoverPicture: File
     eventDate: string
     eventEndDate: string
     hostId: string

@@ -11,9 +11,15 @@ interface Props {
     onSelectDate: (date: Date) => void
 }
 
+function getCurrentTimeString() {
+    const now = new Date();
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    return `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+}
+
 export function EventEndDateModal({isOpen, onClose, onSelectDate}: Props) {
     const [date, setDate] = useState(new Date())
-    const [time, setTime] = useState("23:30:00")
+    const [time, setTime] = useState(getCurrentTimeString())
 
     const handleConfirm = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()

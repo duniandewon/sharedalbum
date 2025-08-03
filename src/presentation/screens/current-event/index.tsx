@@ -58,13 +58,12 @@ export function CurrentEvent() {
                     onSwitchCameraFacingMode={toggleCameraFacingMode}
                 />
             ) : (
-                <div className="h-screen grid items-end p-4">
-                    <EventLobby
-                        eventName={state.currentEvent?.eventName || ""}
-                        isLoggedIn={isLoggedIn}
-                        onJoin={displayName => joinEvent(displayName)}
-                    />
-                </div>
+                <EventLobby
+                    eventCoverPhoto={state.currentEvent?.eventCoverPicture || ""}
+                    eventName={state.currentEvent?.eventName || ""}
+                    isLoggedIn={isLoggedIn}
+                    onJoin={displayName => joinEvent(displayName)}
+                />
             )}
         </div>
     )

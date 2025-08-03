@@ -17,7 +17,11 @@ export function useSingIn() {
     }, [isAuthenticated, isAuthInitialized, navigate, from]);
 
     const handleSignIn = async () => {
-        await signInWithGoogle();
+        try {
+            await signInWithGoogle();
+        } catch (e) {
+            console.log("Login failed:", e)
+        }
     };
 
     return {

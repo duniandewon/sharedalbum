@@ -6,7 +6,7 @@ import {useAuthContext} from "@/presentation/context/authContext.tsx";
 
 export interface EventFormState {
     eventName: string;
-    eventCoverPhoto: string;
+    eventCoverPhoto: File | null;
     eventStartDate: Date;
     eventEndDate: Date;
     numberOfGuests: number;
@@ -88,7 +88,7 @@ export function useEventForm(
 
     const initialFormState: EventFormState = {
         eventName: state.eventName,
-        eventCoverPhoto: "",
+        eventCoverPhoto: null,
         eventStartDate: new Date(),
         eventEndDate: new Date(),
         numberOfGuests: 10,
@@ -126,7 +126,7 @@ export function useEventForm(
         try {
             const newEventId = await createEventUseCase.execute({
                 eventName: formState.eventName,
-                eventCoverPicture: formState.eventCoverPhoto,
+                eventCoverPicture: formState.eventCoverPhoto!,
                 eventDate: formState.eventStartDate.toISOString(),
                 eventEndDate: formState.eventEndDate.toISOString(),
                 guestLimit: formState.numberOfGuests,

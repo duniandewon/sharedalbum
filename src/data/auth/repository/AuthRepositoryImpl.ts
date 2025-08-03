@@ -23,7 +23,7 @@ export class AuthRepositoryImpl implements AuthRepository {
 
         return {
             userId: firebaseUser.uid,
-            email: firebaseUser.email,
+            email: firebaseUser.email || "",
             displayName: firebaseUser.displayName,
             photoUrl: firebaseUser.photoURL,
             emailVerified: firebaseUser.emailVerified,

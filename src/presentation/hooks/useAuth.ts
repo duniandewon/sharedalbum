@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
 import type {LogInWithGoogleUseCase} from "@/domain/auth/usecase/LogInWithGoogleUseCase.ts";
 import type {
-    AuthStateObserverCallback, ObserveAuthStateUseCase, UnsubscribeFunction
+    AuthStateObserverCallback, ObserveAuthStateUseCase
 } from "@/domain/auth/usecase/ObserveAuthStateUseCase.ts";
 import type {User} from "@/domain/shared/domain/User.ts";
 import type {SignOutUseCase} from "@/domain/auth/usecase/SignOutUseCase.ts";
@@ -39,28 +39,29 @@ export function useAuth(
     useEffect(() => {
         const authObserverCallback: AuthStateObserverCallback = (user) => {
             setCurrentUser(user);
-            if (!isAuthInitialized) {
-                setIsAuthInitialized(true);
-            }
+            setIsAuthInitialized(true);
         };
 
-        const unsubscribe: UnsubscribeFunction = observeAuthStateUseCase.execute(authObserverCallback);
+        const unsubscribe = observeAuthStateUseCase.execute(authObserverCallback);
 
-        return () => {
-            unsubscribe();
-        };
-    }, [observeAuthStateUseCase, isAuthInitialized]);
+        return unsubscribe;
+    }, [observeAuthStateUseCase]);
 
     const signInWithGoogle = useCallback(async () => {
         setIsLoadingAuthOp(true);
         setAuthError(null);
-        const signedInUser = await signInWithGoogleUseCase.execute();
-        if (signedInUser) {
-            const userDb = await addOrUpdateUserUseCase.execute(signedInUser)
-            setCurrentUser(userDb)
+        try {
+            const signedInUser = await signInWithGoogleUseCase.execute();
+            if (signedInUser) {
+                await addOrUpdateUserUseCase.execute(signedInUser);
+            }
+        } catch (e) {
+            setAuthError("Failed to sign in.");
+            console.error("useAuth signInWithGoogle failed:", e);
+        } finally {
+            setIsLoadingAuthOp(false);
         }
-        setIsLoadingAuthOp(false);
-    }, [addOrUpdateUserUseCase, signInWithGoogleUseCase]);
+    }, [signInWithGoogleUseCase, addOrUpdateUserUseCase]);
 
     const signOut = useCallback(async () => {
         setIsLoadingAuthOp(true);

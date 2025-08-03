@@ -56,7 +56,7 @@ export function EventCamera({
     }, [stream])
 
     return (
-        <div className="h-screen w-screen grid grid-rows-[1fr_auto] bg-accent relative">
+        <div className="h-dvh w-dvw grid grid-rows-[1fr_auto] bg-accent relative">
             <div className="absolute top-0 left-0 z-50">
                 <AppHeader onClickBack={onNavigateBack}/>
             </div>

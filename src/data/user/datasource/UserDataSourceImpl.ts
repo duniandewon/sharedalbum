@@ -23,6 +23,15 @@ export class UserDataSourceImpl implements UserDataSource {
         return null
     }
 
+    async getUserByEmail(email: string): Promise<UserDto | null> {
+        const user = await get((ref(this.db, `users/${email}`)))
+        if (user.exists()) {
+            return user.val()
+        }
+
+        return null
+    }
+
     updateUser(userId: string, data: Partial<UserDto>): Promise<void> {
         return update(ref(this.db, `users/${userId}`), data);
     }

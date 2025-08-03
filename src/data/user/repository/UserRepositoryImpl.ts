@@ -18,6 +18,10 @@ export class UserRepositoryImpl implements UserRepository {
         return this.userDataSource.getUserById(userId);
     }
 
+    getUserByEmail(email: string): Promise<User | null> {
+        return this.userDataSource.getUserByEmail(email)
+    }
+
     updateUser(userId: string, data: Partial<User>): Promise<void> {
         return this.userDataSource.updateUser(userId, data)
     }
