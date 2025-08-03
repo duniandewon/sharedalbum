@@ -27,7 +27,7 @@ export function CoverPhoto({onSelectCoverPhoto}: Props) {
     };
 
     const renderSelectedImage = () => (
-        <div className="h-full w-1/2 rounded-md bg-white overflow-hidden" onClick={handleCLickFileSelector}>
+        <div className="h-full w-1/2 rounded-md overflow-hidden" onClick={handleCLickFileSelector}>
             <img
                 src={imagePreviewUrl || ""}
                 alt="Selected cover"
@@ -46,7 +46,7 @@ export function CoverPhoto({onSelectCoverPhoto}: Props) {
     )
 
     return (
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center flex-1">
             <input
                 type="file"
                 className="sr-only"

@@ -42,12 +42,12 @@ export function EditEvent() {
 
     return (
         <>
-            <div className="grid grid-rows-[auto_1fr] h-screen">
+            <div className="grid grid-rows-[auto_1fr] h-dvh">
                 <AppHeader
                     onClickBack={onGoBack}
                     title={<Title/>}
                 />
-                <main className="grid grid-rows-2 p-4">
+                <main className="flex flex-col p-4 gap-8">
                     <CoverPhoto onSelectCoverPhoto={file => setField("eventCoverPhoto", file)}/>
 
                     <div className="space-y-4 grid content-end">
