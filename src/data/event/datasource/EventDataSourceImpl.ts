@@ -38,7 +38,7 @@ export class EventDataSourceImpl implements EventDataSource {
     }
 
     async createEvent(event: CreateEventDto): Promise<string | null> {
-        const eventId = await push(ref(this.db, `events`), event)
+        const eventId = await push(ref(this.db, `events`))
 
         const coverPicture = await this.uploadCoverPhoto(eventId.key || "", event.eventCoverPicture)
 
