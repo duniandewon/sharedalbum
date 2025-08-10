@@ -17,8 +17,8 @@ import {
 import { firebaseDatabase, firebaseStorage } from "@/core/config/firebase.ts";
 
 import type { PictureDataSource } from "@/data/picture/datasource/PictureDataSource.ts";
-import { PictureDto } from "@/data/picture/dto/PictureDto.ts";
-import { UploadPictureDto } from "@/data/picture/dto/UploadPictureDto.ts";
+import type { PictureDto } from "@/data/picture/dto/PictureDto.ts";
+import type { UploadPictureDto } from "@/data/picture/dto/UploadPictureDto.ts";
 
 import { HttpClient } from "@/infrastructure/http/http-client";
 import { config } from "@/core/config/environment";
