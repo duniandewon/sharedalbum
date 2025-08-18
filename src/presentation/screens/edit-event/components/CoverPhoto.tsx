@@ -27,7 +27,7 @@ export function CoverPhoto({onSelectCoverPhoto}: Props) {
     };
 
     const renderSelectedImage = () => (
-        <div className="h-full w-1/2 rounded-md overflow-hidden" onClick={handleCLickFileSelector}>
+        <div className="h-full max-h-[32.75rem] w-[70%] rounded-md overflow-hidden" onClick={handleCLickFileSelector}>
             <img
                 src={imagePreviewUrl || ""}
                 alt="Selected cover"

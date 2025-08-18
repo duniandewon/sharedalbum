@@ -17,7 +17,7 @@ function getCurrentTimeString() {
     return `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
 }
 
-export function EventEndDateModal({isOpen, onClose, onSelectDate}: Props) {
+export function EventStartDateModal({isOpen, onClose, onSelectDate}: Props) {
     const [date, setDate] = useState(new Date())
     const [time, setTime] = useState(getCurrentTimeString())
 
@@ -37,10 +37,10 @@ export function EventEndDateModal({isOpen, onClose, onSelectDate}: Props) {
             <form className="space-y-4" onSubmit={handleConfirm}>
                 <div>
                     <h2 className="mb-1 text-lg font-bold">
-                        Event end date
+                        Event start date
                     </h2>
                     <p className="text-xs">
-                        This is when your album locks and submissions are no longer allowed.
+                        This is when your album start and submissions allowed.
                     </p>
                 </div>
                 <div className="grid grid-cols-[1fr_auto] gap-4">
