@@ -6,6 +6,8 @@ export interface PictureRepository {
     getPictureByEventId(eventId: string): Promise<Picture[]>
 
     gitPicturesByUploaderId(eventId: string, uploaderId: string): Promise<Picture[]>
+    
+    downloadPicture(imagePath: string): Promise<Blob>
 
     deletePicture(imageId: string, eventId: string): Promise<void>
 }

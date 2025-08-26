@@ -2,6 +2,7 @@ import {
   type FirebaseStorage,
   ref as storageRef,
   deleteObject,
+  getBlob,
 } from "firebase/storage";
 
 import {
@@ -37,6 +38,11 @@ export class PictureDataSourceImpl implements PictureDataSource {
     this.db = firebaseDb;
     this.storage = storage;
     this.httpClient = httpClient;
+  }
+  downloadPicture(imagePath: string): Promise<Blob> {
+    const imageRef = storageRef(this.storage, imagePath);
+
+    return getBlob(imageRef);
   }
 
   async deletePicture(pictureId: string, eventId: string): Promise<void> {

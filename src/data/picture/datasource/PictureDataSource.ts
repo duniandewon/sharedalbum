@@ -8,4 +8,6 @@ export interface PictureDataSource {
     getPicturesByUploaderId(eventId: string, uploaderId: string): Promise<Record<string, PictureDto>>
 
     deletePicture(pictureId: string, eventId: string): Promise<void>
+
+    downloadPicture(imagePath: string): Promise<Blob>
 }
